@@ -36,7 +36,7 @@ trait TranslationTrait
      * @param mixed $locale
      * @return mixed
      */
-    public function i18n($locale = null)
+    public function i18n($locale = false)
     {
         foreach ($this->translations()->select(['key', 'value', 'locale'])->get() as $trans) {
             if (!array_has($this->localeAttributes, "{$trans->locale}.{$trans->key}")) {
@@ -47,7 +47,7 @@ trait TranslationTrait
         if (is_array($locale)) {
             $this->localeAttributes = array_replace_recursive($this->localeAttributes, $locale);
         } else {
-            $this->useLocale = empty($locale) ? App::getLocale() : $locale;
+            $this->useLocale = $locale;
         }
 
         return $this;
@@ -59,13 +59,21 @@ trait TranslationTrait
      */
     public function __get($key)
     {
-        if (!empty($this->useLocale)) {
+        if (is_string($this->useLocale)) {
             $localePackage = array_get($this->localeAttributes, $this->useLocale, []);
             $appLocalePackage = array_get($this->localeAttributes, App::getLocale(), []);
 
             $this->useLocale = null;
 
             return array_get(array_replace($appLocalePackage, $localePackage), $key, parent::__get($key));
+        }
+
+        if (is_bool($this->useLocale) && $this->useLocale === false) {
+            $val = [];
+            foreach ($this->localeAttributes as $locale => $attrs) {
+                $val[$locale] = array_get($attrs, $key, parent::__get($key));
+            }
+            return $val;
         }
 
         return parent::__get($key);

@@ -134,11 +134,18 @@ class LaravelEloquentI18nTest extends BaseTestCase
         ]);
 
         // === ASSERT ===
-        // i18n() use app locale if unassigned any locale
-        // 如果未指任何語系，就使用 APP 預設語系
-        App::setLocale('zh-Hant');
-        $this->assertEquals('正體中文的標題', $book->i18n()->title);
-        $this->assertEquals('正體中文的內容', $book->i18n()->content);
+        // i18n() return all locales array if unassigned any locale
+        // 如果未指任何語系，就回傳所有語系的屬性陣列
+        $this->assertArraySubset([
+            'zh-Hant' => '正體中文的標題',
+            'zh-Hans' => '简体中文的标题',
+            'en' => 'english title',
+        ], $book->i18n()->title);
+        $this->assertArraySubset([
+            'zh-Hant' => '正體中文的內容',
+            'zh-Hans' => 'raw content',
+            'en' => 'english content',
+        ], $book->i18n()->content);
 
         // i18n() use assign locale
         // 使用指定的語系
@@ -191,11 +198,18 @@ class LaravelEloquentI18nTest extends BaseTestCase
         ])->save();
 
         // === ASSERT ===
-        // i18n() use app locale if unassigned any locale
-        // 如果未指任何語系，就使用 APP 預設語系
-        App::setLocale('zh-Hant');
-        $this->assertEquals('正體中文的標題', $book->i18n()->title);
-        $this->assertEquals('正體中文的內容', $book->i18n()->content);
+        // i18n() return all locales array if unassigned any locale
+        // 如果未指任何語系，就回傳所有語系的屬性陣列
+        $this->assertArraySubset([
+            'zh-Hant' => '正體中文的標題',
+            'zh-Hans' => '简体中文的标题',
+            'en' => 'english title',
+        ], $book->i18n()->title);
+        $this->assertArraySubset([
+            'zh-Hant' => '正體中文的內容',
+            'zh-Hans' => 'raw content',
+            'en' => 'english content',
+        ], $book->i18n()->content);
 
         // i18n() use assign locale
         // 使用指定的語系
@@ -245,11 +259,18 @@ class LaravelEloquentI18nTest extends BaseTestCase
         $book->save();
 
         // === ASSERT ===
-        // i18n() use app locale if unassigned any locale
-        // 如果未指任何語系，就使用 APP 預設語系
-        App::setLocale('zh-Hant');
-        $this->assertEquals('正體中文的標題', $book->i18n()->title);
-        $this->assertEquals('正體中文的內容', $book->i18n()->content);
+        // i18n() return all locales array if unassigned any locale
+        // 如果未指任何語系，就回傳所有語系的屬性陣列
+        $this->assertArraySubset([
+            'zh-Hant' => '正體中文的標題',
+            'zh-Hans' => '简体中文的标题',
+            'en' => 'english title',
+        ], $book->i18n()->title);
+        $this->assertArraySubset([
+            'zh-Hant' => '正體中文的內容',
+            'zh-Hans' => 'raw content',
+            'en' => 'english content',
+        ], $book->i18n()->content);
 
         // i18n() use assign locale
         // 使用指定的語系
@@ -297,11 +318,18 @@ class LaravelEloquentI18nTest extends BaseTestCase
         $book->save();
 
         // === ASSERT ===
-        // i18n() use app locale if unassigned any locale
-        // 如果未指任何語系，就使用 APP 預設語系
-        App::setLocale('zh-Hant');
-        $this->assertEquals('正體中文的標題', $book->i18n()->title);
-        $this->assertEquals('正體中文的內容', $book->i18n()->content);
+        // i18n() return all locales array if unassigned any locale
+        // 如果未指任何語系，就回傳所有語系的屬性陣列
+        $this->assertArraySubset([
+            'zh-Hant' => '正體中文的標題',
+            'zh-Hans' => '简体中文的标题',
+            'en' => 'english title',
+        ], $book->i18n()->title);
+        $this->assertArraySubset([
+            'zh-Hant' => '正體中文的內容',
+            'zh-Hans' => 'raw content',
+            'en' => 'english content',
+        ], $book->i18n()->content);
 
         // i18n() use assign locale
         // 使用指定的語系

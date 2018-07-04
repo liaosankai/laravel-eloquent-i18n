@@ -90,12 +90,18 @@ Arrange presence translations data：
         ],
     ])->save();
     
-i18n() use app locale if unassigned any locale
+i18n() use all locales array if unassigned any locale
 
     App::setLocale('zh-Hant');
-    $book->i18n()->title; // 正體中文的標題
-    $book->i18n()->content; // 正體中文的內容
-    
+    $book->i18n()->title;
+    /* 
+      [
+         'zh-Hant' => '正體中文的標題',
+         'zh-Hans' => '简体中文的标题',
+         'en' => 'english title',
+      ]
+    */
+       
 i18n() use assign locale
 
     $book->i18n('zh-Hant')->title; // 正體中文的標題
