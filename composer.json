@@ -1,0 +1,50 @@
+{
+  "name": "liaosankai/laravel-eloquent-i18n",
+  "keywords": [
+    "laravel",
+    "eloquent",
+    "model",
+    "i18n",
+    "translate"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Liao San Kai",
+      "email": "liaosankai@gmail.com",
+      "homepage": "https://blog.liaosankai.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~7.0",
+    "orchestra/testbench": "^3.5",
+    "orchestra/database": "^3.5",
+    "vlucas/phpdotenv": "^2.4",
+    "ariby/ulid": "^0.2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Liaosankai\\LaravelEloquentI18n\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Liaosankai\\LaravelEloquentI18n\\Tests\\": "tests/",
+      "Liaosankai\\LaravelEloquentI18n\\Mocks\\": "mocks/app/"
+    }
+  },
+  "minimum-stability": "stable",
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Liaosankai\\LaravelEloquentI18n\\LaravelEloquentI18nServiceProvider"
+      ],
+      "aliases": {
+      }
+    }
+  }
+}
