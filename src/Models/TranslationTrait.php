@@ -73,6 +73,9 @@ trait TranslationTrait
             foreach ($this->localeAttributes as $locale => $attrs) {
                 $val[$locale] = array_get($attrs, $key, parent::__get($key));
             }
+
+            $this->useLocale = null;
+
             return $val;
         }
 
