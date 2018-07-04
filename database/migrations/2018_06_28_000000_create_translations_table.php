@@ -17,7 +17,7 @@ class CreateTranslationsTable extends Migration
             $table->increments('id');
             $table->string('locale');
             $table->string('key');
-            $table->text('value');
+            $table->mediumText('value')->nullable();
             $table->string('translatable_id')->nullable();
             $table->string('translatable_type')->nullable();
             $table->dateTime('updated_at');
