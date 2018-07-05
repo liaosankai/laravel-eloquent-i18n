@@ -13,6 +13,9 @@ All notable changes to laravel-eloquent-i18n will be documented in this file
     ])->get();
 ```
 
+## 1.1.1 (2018-07-04)
++ Fix forget to set `$this->userLocale = null;` after __get()
+
 ## 1.1.0 (2018-07-04)
 + i18n() without assign any locale will return locales attribute array.
 ```
