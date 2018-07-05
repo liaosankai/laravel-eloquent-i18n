@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to laravel-eloquent-i18n will be documented in this file
 
+## 1.2.0 (2018-07-05)
++ add i18nLike() model scope
+```
+    $book->i18nLike([
+        'filter' => [
+            'title' => 'keywords for title',
+            'content' => 'keywords for content'.
+        ],
+        'locale' => 'zh-Hant',
+    ])->get();
+```
+
 ## 1.1.0 (2018-07-04)
 + i18n() without assign any locale will return locales attribute array.
 ```

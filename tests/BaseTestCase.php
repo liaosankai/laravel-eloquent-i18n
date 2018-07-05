@@ -211,4 +211,22 @@ class BaseTestCase extends TestCase
         }
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | 補助方法
+    |--------------------------------------------------------------------------
+    */
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return null|string|string[]
+     */
+    public function ddSql(\Illuminate\Database\Eloquent\Builder $builder)
+    {
+        $sql = $builder->toSql();
+        foreach ($builder->getBindings() as $binding) {
+            $value = is_numeric($binding) ? $binding : "'" . $binding . "'";
+            $sql = preg_replace('/\?/', $value, $sql, 1);
+        }
+        dd($sql);
+    }
 }

@@ -123,5 +123,17 @@ Use raw data without i18n()
     $book->title; // raw title
     $book->content; // raw content
     
+### filter translations data
+use model scope where
+
+    $book->i18nLike([
+        'filter' => [
+            'title' => 'keywords for title',
+            'content' => 'keywords for content'.
+        ],
+        'locale' => 'zh-Hant',
+    ])->get();
+   
+    
 ### LICENSE
 `laravel-eloquent-i18n` is released under the [MIT License]()

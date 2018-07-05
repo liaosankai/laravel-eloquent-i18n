@@ -356,4 +356,88 @@ class LaravelEloquentI18nTest extends BaseTestCase
         // 最後語系資料檔應該有 5 筆
         $this->assertEquals(5, Translation::count());
     }
+
+    /**
+     * 過濾條件測試
+     *
+     * @test
+     */
+    public function testI18nLike()
+    {
+        // ARRANGE
+        $books = [
+            [
+                'zh-Hant' => [
+                    'title' => 'Laravel - 開始到放棄',
+                ],
+                'zh-Hans' => [
+                    'title' => 'Laravel - 开始到放弃',
+                ],
+                'en' => [
+                    'title' => 'Laravel - take up and then give up',
+                ],
+            ],
+            [
+                'zh-Hant' => [
+                    'title' => 'PHP - 入門到出家',
+                ],
+                'zh-Hans' => [
+                    'title' => 'PHP - 入门到出家',
+                ],
+                'en' => [
+                    'title' => 'PHP - begin and then become a monk',
+                ],
+            ],
+            [
+                'zh-Hant' => [
+                    'title' => 'PHP - 入門到出家',
+                ],
+                'zh-Hans' => [
+                    'title' => 'PHP - 入门到出家',
+                ],
+                'en' => [
+                    'title' => 'PHP - begin and then become a monk',
+                ],
+            ],
+            [
+                'zh-Hant' => [
+                    'title' => 'PHP - 程式界的霸主 - 霸凌的苦主',
+                ],
+                'zh-Hans' => [
+                    'title' => 'PHP - 程式界的霸主 - 霸凌的苦主',
+                ],
+                'en' => [
+                    'title' => 'PHP - the overlord of the program world - the lord of bullying',
+                ],
+            ],
+        ];
+
+        foreach ($books as $data) {
+            $book = new Book();
+            $book->title = data_get($data, 'en.title');
+            $book->content = 'bla bla bla...';
+            $book->author = 'liaosankai';
+            $book->i18n($data);
+            $book->save();
+        }
+
+        // === ACTION ===
+        $query = new Book();
+        $query = $query->i18nLike([
+            'filter' => [
+                'title' => 'PHP'
+            ],
+            'locale' => 'zh-Hant'
+        ])->i18nLike([
+            'filter' => [
+                'title' => '霸主'
+            ],
+            'locale' => 'zh-Hant'
+        ]);
+
+        // === ASSERT ===
+        $this->assertEquals(1, $query->count());
+        $this->assertEquals(1, $query->get()->count());
+    }
+
 }

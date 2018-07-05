@@ -3,6 +3,7 @@
 namespace Liaosankai\LaravelEloquentI18n\Models;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 
 trait TranslationTrait
 {
@@ -137,4 +138,66 @@ trait TranslationTrait
 
     }
 
+    protected $subQuerySql;
+
+    /**
+     * @param array $attrValue
+     * @param null $locale
+     * @return $this
+     */
+    public function scopeI18nLike($query, $params)
+    {
+        $tempColName = '__i18n__' . str_random(5);
+
+        $query->withCount([
+            "translations AS {$tempColName}" => function ($query) use ($params) {
+                $attrValue = array_get($params, 'filter');
+                $locale = array_get($params, 'locale');
+
+                if ($locale) {
+                    $query->where('locale', $locale);
+                }
+                foreach ($attrValue as $attr => $val) {
+                    $query->where('key', $attr);
+                    $query->where('value', 'LIKE', "%{$val}%");
+                }
+                $this->subQuerySql = str_replace(__CLASS__, addslashes(__CLASS__), $this->toSql($query));
+            }
+        ])->where(function ($query) {
+            $query->where(DB::raw("({$this->subQuerySql})"), '>', 0);
+        });
+        $this->subQuerySql = '';
+        return $query;
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return null|string|string[]
+     */
+    public function toSql(\Illuminate\Database\Eloquent\Builder $builder)
+    {
+        $sql = $builder->toSql();
+        foreach ($builder->getBindings() as $binding) {
+            $value = is_numeric($binding) ? $binding : "'" . $binding . "'";
+            $sql = preg_replace('/\?/', $value, $sql, 1);
+        }
+        return $sql;
+    }
+
+    /**
+     * Convert the model instance to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $attributesToArray = [];
+        foreach ($this->attributesToArray() as $attr => $value) {
+            if (!starts_with($attr, '__i18n__')) {
+                $attributesToArray[$attr] = $value;
+            }
+        }
+
+        return array_merge($attributesToArray, $this->relationsToArray());
+    }
 }
