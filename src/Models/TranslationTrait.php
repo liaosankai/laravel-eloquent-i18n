@@ -18,6 +18,11 @@ trait TranslationTrait
     protected $localeAttributes = [];
 
     /**
+     * @var
+     */
+    protected $subQuerySql;
+
+    /**
      * @return mixed
      */
     public function translations()
@@ -138,7 +143,7 @@ trait TranslationTrait
 
     }
 
-    protected $subQuerySql;
+
 
     /**
      * @param array $attrValue
@@ -174,7 +179,7 @@ trait TranslationTrait
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return null|string|string[]
      */
-    public function toSql(\Illuminate\Database\Eloquent\Builder $builder)
+    private function toSql(\Illuminate\Database\Eloquent\Builder $builder)
     {
         $sql = $builder->toSql();
         foreach ($builder->getBindings() as $binding) {
