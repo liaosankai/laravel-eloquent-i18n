@@ -20,5 +20,35 @@ class Book extends Model
         'content',
         'author',
     ];
+
+
+    public static function boot()
+    {
+        self::creating(function ($book) {
+            echo 'creating' . PHP_EOL;
+        });
+
+        self::created(function ($book) {
+            echo 'created' . PHP_EOL;
+        });
+
+        self::updating(function ($book) {
+            echo 'updating' . PHP_EOL;
+        });
+
+        self::updating(function ($book) {
+            echo 'updated' . PHP_EOL;
+        });
+
+        self::saving(function ($book) {
+            echo 'saving'. PHP_EOL;
+        });
+
+        self::saved(function ($book) {
+            echo 'saved'. PHP_EOL;
+        });
+    }
+
+
 }
 

@@ -2,6 +2,7 @@
 
 namespace Liaosankai\LaravelEloquentI18n\Tests;
 
+use Illuminate\Foundation\Testing\Concerns\MocksApplicationServices;
 use Illuminate\Support\Facades\App;
 use Liaosankai\LaravelEloquentI18n\Mocks\Models\Article;
 use Liaosankai\LaravelEloquentI18n\Mocks\Models\Book;
@@ -19,7 +20,6 @@ class LaravelEloquentI18nTest extends BaseTestCase
     public function setUp()
     {
         parent::setUp();
-
         $this->loadPackageMigrations();
         $this->loadMockMigrations();
     }
@@ -235,6 +235,7 @@ class LaravelEloquentI18nTest extends BaseTestCase
 
     }
 
+
     /**
      * 寫入測試 (設定單一屬性的多個語系)
      *
@@ -439,5 +440,34 @@ class LaravelEloquentI18nTest extends BaseTestCase
         $this->assertEquals(1, $query->count());
         $this->assertEquals(1, $query->get()->count());
     }
+
+    /**
+     * 測試在寫入或更新語系資料時，應當觸發 updating 與 saving 事件
+     */
+    public function testModelTouchEvent()
+    {
+        $book = new Book();
+
+        $this->expectsEvents([
+            'eloquent.saving: ' . get_class($book),
+            'eloquent.updating: ' . get_class($book),
+        ]);
+
+        // ARRANGE
+        $book = new Book();
+        $book->title = [
+            'zh-Hant' => '正體中文的標題',
+            'zh-Hans' => '简体中文的标题',
+            'en' => 'english title',
+        ];
+        $book->save();
+
+//        $book = Book::first();
+//        $book->i18n('en')->title = 'Event Test!!';
+//        $book->save();
+
+
+    }
+
 
 }

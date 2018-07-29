@@ -24,7 +24,8 @@
     "orchestra/testbench": "^3.5",
     "orchestra/database": "^3.5",
     "vlucas/phpdotenv": "^2.4",
-    "ariby/ulid": "^0.2.1"
+    "ariby/ulid": "^0.2.1",
+    "mockery/mockery": "^1.1"
   },
   "autoload": {
     "psr-4": {

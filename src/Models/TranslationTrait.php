@@ -2,6 +2,7 @@
 
 namespace Liaosankai\LaravelEloquentI18n\Models;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
@@ -120,29 +121,40 @@ trait TranslationTrait
 
     /**
      * @param array $options
+     * @return mixed
      */
     public function save(array $options = [])
     {
-        parent::save($options);
+        $saved = parent::save($options);
 
-        foreach ($this->localeAttributes as $locale => $keyVal) {
-            foreach ($keyVal as $key => $val) {
-                Translation::updateOrCreate(
-                    [
-                        'locale' => $locale,
-                        'key' => $key,
-                        'translatable_id' => $this->id,
-                    ],
-                    [
-                        'translatable_type' => __CLASS__,
-                        'value' => $val,
-                    ]
-                );
+        // TODO: 儲存語系檔案應該發出自訂語系資料完成設定事件
+
+        if (is_array($this->localeAttributes)) {
+            $updateOrCreate = false;
+            $this->fireModelEvent('updating');
+            foreach ($this->localeAttributes as $locale => $keyVal) {
+                foreach ($keyVal as $key => $val) {
+                    $updateOrCreate = Translation::updateOrCreate(
+                        [
+                            'locale' => $locale,
+                            'key' => $key,
+                            'translatable_id' => $this->id,
+                        ],
+                        [
+                            'translatable_type' => __CLASS__,
+                            'value' => $val,
+                        ]
+                    );
+                }
+            }
+            if ($updateOrCreate) {
+                $this->fireModelEvent('updated');
             }
         }
 
-    }
 
+        return $saved;
+    }
 
 
     /**
